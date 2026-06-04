@@ -1,0 +1,1549 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio · RT Alternance</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <style>
+    /* ─────────────────────────────────────────────────────────
+       TOKENS & RESET
+    ───────────────────────────────────────────────────────── */
+    :root {
+      --bg: #0a0c10;
+      --surface: #111318;
+      --card: #161a22;
+      --border: rgba(255,255,255,0.07);
+      --accent: #00e5a0;
+      --accent2: #5b8fff;
+      --accent3: #ff6b6b;
+      --text: #e8eaf0;
+      --muted: #7a8099;
+      --font-head: 'Syne', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+      --radius: 16px;
+      --transition: 0.35s cubic-bezier(0.4,0,0.2,1);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+    ::selection { background: var(--accent); color: #000; }
+    a { color: inherit; text-decoration: none; }
+    ul { list-style: none; }
+    img { display: block; max-width: 100%; }
+
+    /* ─────────────────────────────────────────────────────────
+       SCROLLBAR
+    ───────────────────────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
+
+    /* ─────────────────────────────────────────────────────────
+       NOISE OVERLAY
+    ───────────────────────────────────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.35;
+    }
+
+    /* ─────────────────────────────────────────────────────────
+       NAV
+    ───────────────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 3rem;
+      background: rgba(10,12,16,0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      transition: var(--transition);
+    }
+    .nav-logo {
+      font-family: var(--font-head);
+      font-weight: 800;
+      font-size: 1.1rem;
+      letter-spacing: -0.02em;
+      color: var(--accent);
+    }
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .nav-links a {
+      color: var(--muted);
+      transition: color var(--transition);
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0; right: 0;
+      height: 1px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transition: transform var(--transition);
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+    .nav-cta {
+      background: var(--accent);
+      color: #000 !important;
+      padding: 0.45rem 1.2rem;
+      border-radius: 100px;
+      font-weight: 500 !important;
+      font-size: 0.8rem !important;
+    }
+    .nav-cta::after { display: none !important; }
+    .nav-cta:hover { background: #00ffb3 !important; }
+
+    /* ─────────────────────────────────────────────────────────
+       HERO
+    ───────────────────────────────────────────────────────── */
+    #accueil {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 8rem 3rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 70% 40%, rgba(0,229,160,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 40% at 20% 70%, rgba(91,143,255,0.06) 0%, transparent 60%);
+    }
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 0%, transparent 70%);
+    }
+    .hero-inner {
+      position: relative;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .hero-left { animation: fadeUp 0.9s ease both; }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      font-weight: 500;
+    }
+    .hero-eyebrow span {
+      width: 24px; height: 1px;
+      background: var(--accent);
+      display: inline-block;
+    }
+    h1 {
+      font-family: var(--font-head);
+      font-size: clamp(3rem, 6vw, 5.5rem);
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      margin-bottom: 1.5rem;
+    }
+    h1 .name {
+      display: block;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-desc {
+      color: var(--muted);
+      font-size: 1.05rem;
+      max-width: 420px;
+      margin-bottom: 2.5rem;
+    }
+    .hero-desc strong { color: var(--text); font-weight: 500; }
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--accent);
+      color: #000;
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: 0.9rem;
+      padding: 0.8rem 1.8rem;
+      border-radius: 100px;
+      transition: var(--transition);
+      border: none;
+      cursor: pointer;
+    }
+    .btn-primary:hover { background: #00ffb3; transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,229,160,0.3); }
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: transparent;
+      color: var(--text);
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: 0.9rem;
+      padding: 0.8rem 1.8rem;
+      border-radius: 100px;
+      border: 1px solid var(--border);
+      transition: var(--transition);
+      cursor: pointer;
+    }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+    .hero-right {
+      animation: fadeUp 0.9s 0.2s ease both;
+      display: flex;
+      justify-content: center;
+    }
+    .profile-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      width: 320px;
+      position: relative;
+      overflow: hidden;
+    }
+    .profile-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+    }
+    .profile-photo {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      margin-bottom: 1rem;
+      overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem;
+    }
+    /* ── EDIT: remplace l'emoji par une vraie photo ── */
+    .profile-photo img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+    .profile-name {
+      font-family: var(--font-head);
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+    .profile-role {
+      color: var(--accent);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 500;
+      margin-bottom: 1.2rem;
+    }
+    .profile-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .tag {
+      background: rgba(0,229,160,0.08);
+      color: var(--accent);
+      border: 1px solid rgba(0,229,160,0.2);
+      padding: 0.25rem 0.7rem;
+      border-radius: 100px;
+      font-size: 0.72rem;
+      font-weight: 500;
+    }
+    .tag.blue { background: rgba(91,143,255,0.08); color: var(--accent2); border-color: rgba(91,143,255,0.2); }
+    .profile-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+    .stat-box {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 0.75rem;
+      text-align: center;
+    }
+    .stat-num {
+      font-family: var(--font-head);
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--accent);
+      line-height: 1;
+    }
+    .stat-label { font-size: 0.7rem; color: var(--muted); margin-top: 0.2rem; }
+
+    /* ─────────────────────────────────────────────────────────
+       SECTION SHARED
+    ───────────────────────────────────────────────────────── */
+    section {
+      padding: 6rem 3rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .section-header {
+      margin-bottom: 3.5rem;
+    }
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 0.8rem;
+    }
+    .section-label span { width: 20px; height: 1px; background: var(--accent); }
+    h2 {
+      font-family: var(--font-head);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+    }
+    h2 em { color: var(--accent); font-style: normal; }
+    .section-desc {
+      color: var(--muted);
+      max-width: 550px;
+      margin-top: 0.75rem;
+      font-size: 1rem;
+    }
+
+    /* ─────────────────────────────────────────────────────────
+       ENTREPRISE
+    ───────────────────────────────────────────────────────── */
+    #entreprise { padding-top: 2rem; }
+    .entreprise-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+    .info-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    .info-card:hover {
+      border-color: rgba(0,229,160,0.25);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    .info-card h3 {
+      font-family: var(--font-head);
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .icon {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+    .icon.green { background: rgba(0,229,160,0.1); }
+    .icon.blue { background: rgba(91,143,255,0.1); }
+    .icon.red { background: rgba(255,107,107,0.1); }
+    .info-card p {
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.8;
+    }
+    /* EDIT PLACEHOLDER */
+    .edit-hint {
+      display: inline-block;
+      background: rgba(255,107,107,0.08);
+      border: 1px dashed rgba(255,107,107,0.3);
+      color: #ff6b6b;
+      font-size: 0.78rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
+      margin-top: 0.5rem;
+      font-style: italic;
+    }
+    .entreprise-full {
+      grid-column: 1 / -1;
+    }
+    .orgchart {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+    .orgchart-node {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      color: var(--text);
+    }
+    .orgchart-node.active {
+      background: rgba(0,229,160,0.1);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .orgchart-sep { color: var(--muted); }
+
+    /* ─────────────────────────────────────────────────────────
+       MISSIONS
+    ───────────────────────────────────────────────────────── */
+    #missions { background: var(--surface); border-radius: 32px; max-width: 100%; padding: 6rem; margin: 0; }
+    .missions-wrapper { max-width: 1200px; margin: 0 auto; }
+    .missions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 1.5rem;
+      margin-top: 3.5rem;
+    }
+    .mission-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: var(--transition);
+      cursor: pointer;
+    }
+    .mission-card:hover {
+      border-color: rgba(0,229,160,0.25);
+      transform: translateY(-6px);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.4);
+    }
+    .mission-header {
+      padding: 1.5rem 1.5rem 1rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+    .mission-num {
+      font-family: var(--font-head);
+      font-size: 0.65rem;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+      background: rgba(0,229,160,0.1);
+      padding: 0.3rem 0.6rem;
+      border-radius: 6px;
+      flex-shrink: 0;
+      margin-top: 3px;
+    }
+    .mission-meta { flex: 1; }
+    .mission-title {
+      font-family: var(--font-head);
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+    .mission-period {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+    .mission-body { padding: 1.2rem 1.5rem; }
+    .mission-body p { font-size: 0.88rem; color: var(--muted); margin-bottom: 1rem; line-height: 1.7; }
+    .mission-ac {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 1rem;
+    }
+    .ac-tag {
+      font-size: 0.68rem;
+      font-weight: 500;
+      padding: 0.2rem 0.55rem;
+      border-radius: 100px;
+      background: rgba(91,143,255,0.1);
+      color: var(--accent2);
+      border: 1px solid rgba(91,143,255,0.2);
+    }
+    .mission-footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .mission-status {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.75rem;
+      color: var(--accent);
+      font-weight: 500;
+    }
+    .mission-status .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: pulse 2s ease infinite;
+    }
+    .mission-arrow {
+      color: var(--muted);
+      font-size: 0.8rem;
+      transition: var(--transition);
+    }
+    .mission-card:hover .mission-arrow { color: var(--accent); transform: translateX(4px); }
+
+    /* MODAL */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(12px);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--transition);
+    }
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+    .modal {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      max-width: 720px;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 2.5rem;
+      transform: translateY(20px) scale(0.98);
+      transition: transform var(--transition);
+      position: relative;
+    }
+    .modal-overlay.active .modal { transform: translateY(0) scale(1); }
+    .modal-close {
+      position: absolute;
+      top: 1.5rem; right: 1.5rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+    .modal-close:hover { background: var(--accent); color: #000; border-color: var(--accent); }
+    .modal h3 {
+      font-family: var(--font-head);
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+    }
+    .modal-period { color: var(--muted); font-size: 0.85rem; margin-bottom: 1.5rem; }
+    .modal-section { margin-bottom: 1.5rem; }
+    .modal-section-title {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+    }
+    .modal-section p { color: var(--muted); font-size: 0.9rem; line-height: 1.8; }
+    .modal-section ul { color: var(--muted); font-size: 0.9rem; }
+    .modal-section ul li { padding: 0.3rem 0; padding-left: 1.2rem; position: relative; }
+    .modal-section ul li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+    }
+    .selfeval-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+    }
+    .selfeval-item { text-align: center; }
+    .selfeval-bar {
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      margin-top: 0.5rem;
+      overflow: hidden;
+    }
+    .selfeval-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 2px;
+      transition: width 1s ease;
+    }
+    .selfeval-label { font-size: 0.7rem; color: var(--muted); }
+
+    /* ─────────────────────────────────────────────────────────
+       BILAN PAR COMPÉTENCE
+    ───────────────────────────────────────────────────────── */
+    #bilan { padding-top: 6rem; }
+    .competences-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .comp-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.8rem;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    .comp-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 2px;
+      transition: var(--transition);
+    }
+    .comp-card.c1::after { background: var(--accent); }
+    .comp-card.c2::after { background: var(--accent2); }
+    .comp-card.c3::after { background: var(--accent3); }
+    .comp-card.c4::after { background: #f0c040; }
+    .comp-card:hover { transform: translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,0.3); border-color: rgba(255,255,255,0.12); }
+    .comp-icon {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+    }
+    .comp-card h3 {
+      font-family: var(--font-head);
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      line-height: 1.3;
+    }
+    .comp-card p { color: var(--muted); font-size: 0.85rem; line-height: 1.7; margin-bottom: 1.2rem; }
+    .comp-level {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.4rem;
+    }
+    .comp-level-label { font-size: 0.72rem; color: var(--muted); }
+    .comp-level-value { font-size: 0.72rem; font-weight: 600; }
+    .comp-bar {
+      height: 5px;
+      background: var(--surface);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .comp-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 1.5s ease;
+    }
+    .c1 .comp-fill { background: var(--accent); }
+    .c2 .comp-fill { background: var(--accent2); }
+    .c3 .comp-fill { background: var(--accent3); }
+    .c4 .comp-fill { background: #f0c040; }
+
+    /* AC LIST IN BILAN */
+    .ac-list {
+      margin-top: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .ac-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+    .ac-item::before {
+      content: '✓';
+      color: var(--accent);
+      flex-shrink: 0;
+      font-size: 0.7rem;
+      margin-top: 0.15rem;
+    }
+
+    /* ─────────────────────────────────────────────────────────
+       PROGRESSION / AUTOÉVALUATION
+    ───────────────────────────────────────────────────────── */
+    #progression {
+      background: linear-gradient(135deg, rgba(0,229,160,0.03) 0%, rgba(91,143,255,0.03) 100%);
+      border: 1px solid var(--border);
+      border-radius: 32px;
+      max-width: 100%;
+      padding: 6rem;
+      margin: 2rem 0;
+    }
+    .progression-wrapper { max-width: 1200px; margin: 0 auto; }
+    .timeline {
+      position: relative;
+      padding-left: 2rem;
+      margin-top: 3rem;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--accent), var(--accent2), transparent);
+    }
+    .timeline-item {
+      position: relative;
+      padding-bottom: 2.5rem;
+      padding-left: 2rem;
+    }
+    .timeline-dot {
+      position: absolute;
+      left: -2.65rem;
+      top: 0.3rem;
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 2px solid var(--bg);
+      box-shadow: 0 0 0 3px rgba(0,229,160,0.2);
+    }
+    .timeline-date {
+      font-size: 0.72rem;
+      color: var(--accent);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.3rem;
+    }
+    .timeline-item h4 {
+      font-family: var(--font-head);
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+    .timeline-item p { color: var(--muted); font-size: 0.88rem; line-height: 1.7; max-width: 600px; }
+
+    /* ─────────────────────────────────────────────────────────
+       FOOTER
+    ───────────────────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 100%;
+    }
+    .footer-left {
+      font-family: var(--font-head);
+      font-weight: 800;
+      color: var(--accent);
+    }
+    .footer-right { color: var(--muted); font-size: 0.8rem; }
+    .footer-right strong { color: var(--text); }
+
+    /* ─────────────────────────────────────────────────────────
+       ANIMATIONS
+    ───────────────────────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    .float-anim { animation: float 4s ease-in-out infinite; }
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ─────────────────────────────────────────────────────────
+       RESPONSIVE
+    ───────────────────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      #accueil { padding: 6rem 1.5rem 3rem; }
+      .hero-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .hero-right { display: none; }
+      section { padding: 4rem 1.5rem; }
+      .entreprise-grid { grid-template-columns: 1fr; }
+      #missions { padding: 4rem 1.5rem; border-radius: 20px; }
+      #progression { padding: 4rem 1.5rem; border-radius: 20px; }
+      footer { flex-direction: column; gap: 1rem; text-align: center; padding: 2rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════════════
+       NAV
+  ═══════════════════════════════════════════════════════ -->
+  <nav>
+    <div class="nav-logo">
+      <!-- 🖊️ MODIFIE : tes initiales ou ton logo -->
+      RT · Portfolio
+    </div>
+    <ul class="nav-links">
+      <li><a href="#accueil">Accueil</a></li>
+      <li><a href="#entreprise">Entreprise</a></li>
+      <li><a href="#missions">Missions</a></li>
+      <li><a href="#bilan">Bilan</a></li>
+      <li><a href="#progression">Progression</a></li>
+      <li><a href="#entreprise" class="nav-cta">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════════════════
+       HERO / ACCUEIL
+  ═══════════════════════════════════════════════════════ -->
+  <div id="accueil">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-inner">
+      <div class="hero-left">
+        <div class="hero-eyebrow">
+          <span></span>
+          Portfolio d'alternance · BUT R&T 2025–2026
+        </div>
+        <h1>
+          <!-- 🖊️ MODIFIE : ton prénom et ton nom -->
+          Prénom
+          <span class="name">NOM</span>
+        </h1>
+        <p class="hero-desc">
+          <!-- 🖊️ MODIFIE : ta spécialité, ton entreprise, ta description -->
+          Étudiant en <strong>BUT Réseaux & Télécommunications</strong>, parcours <strong>Cybersécurité</strong> · Alternant chez <strong>Nom de l'entreprise</strong>.<br/>
+          Ce portfolio retrace mon développement de compétences à travers mes missions professionnelles.
+        </p>
+        <div class="hero-actions">
+          <a href="#missions" class="btn-primary">Voir mes missions →</a>
+          <a href="#bilan" class="btn-ghost">Bilan compétences</a>
+        </div>
+      </div>
+      <div class="hero-right float-anim">
+        <div class="profile-card">
+          <div class="profile-photo">
+            <!-- 🖊️ MODIFIE : remplace l'emoji par <img src="ta-photo.jpg" alt="Photo"> -->
+            🎓
+          </div>
+          <div class="profile-name">
+            <!-- 🖊️ MODIFIE -->
+            Prénom NOM
+          </div>
+          <div class="profile-role">BUT R&T · Parcours Cyber · S4</div>
+          <div class="profile-tags">
+            <!-- 🖊️ MODIFIE : ajoute tes technos / compétences -->
+            <span class="tag">Réseaux</span>
+            <span class="tag">Cybersécurité</span>
+            <span class="tag blue">Linux</span>
+            <span class="tag blue">Cisco</span>
+            <span class="tag">VPN</span>
+            <span class="tag blue">Python</span>
+          </div>
+          <div class="profile-stats">
+            <div class="stat-box">
+              <!-- 🖊️ MODIFIE : nombre de missions -->
+              <div class="stat-num">4</div>
+              <div class="stat-label">Missions</div>
+            </div>
+            <div class="stat-box">
+              <!-- 🖊️ MODIFIE : nombre de compétences travaillées -->
+              <div class="stat-num">4</div>
+              <div class="stat-label">Compétences</div>
+            </div>
+            <div class="stat-box">
+              <!-- 🖊️ MODIFIE : durée de l'alternance en semaines -->
+              <div class="stat-num">24</div>
+              <div class="stat-label">Semaines</div>
+            </div>
+            <div class="stat-box">
+              <!-- 🖊️ MODIFIE : nombre d'AC couverts -->
+              <div class="stat-num">12</div>
+              <div class="stat-label">AC couverts</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       ENTREPRISE
+  ═══════════════════════════════════════════════════════ -->
+  <section id="entreprise">
+    <div class="section-header reveal">
+      <div class="section-label"><span></span> Section 2</div>
+      <h2>L'<em>entreprise</em> & mon rôle</h2>
+      <p class="section-desc">Présentation de la structure d'accueil, de mon positionnement et de mon projet professionnel.</p>
+    </div>
+    <div class="entreprise-grid">
+
+      <div class="info-card reveal">
+        <h3><span class="icon green">🏢</span> L'entreprise</h3>
+        <!-- 🖊️ MODIFIE : présente ton entreprise -->
+        <p>
+          <strong style="color:var(--text)">Nom de l'entreprise</strong> est une entreprise spécialisée dans [secteur d'activité].
+          Elle compte [nombre] collaborateurs et intervient principalement dans [domaine].
+        </p>
+        <span class="edit-hint">✏️ Remplace par la description de ton entreprise</span>
+      </div>
+
+      <div class="info-card reveal">
+        <h3><span class="icon blue">📍</span> Mon service</h3>
+        <!-- 🖊️ MODIFIE : décris le service où tu travailles -->
+        <p>
+          Je suis intégré au sein du service <strong style="color:var(--text)">[Nom du service]</strong>,
+          composé de [X] personnes. Ce service est responsable de [rôle du service dans l'organisation].
+        </p>
+        <span class="edit-hint">✏️ Remplace par la description de ton service</span>
+      </div>
+
+      <div class="info-card reveal">
+        <h3><span class="icon green">🎯</span> Mes responsabilités</h3>
+        <!-- 🖊️ MODIFIE : liste tes responsabilités -->
+        <p>
+          Durant cette alternance, j'ai pris en charge les missions suivantes :
+          [mission principale 1], [mission principale 2], [mission principale 3].
+          Mon niveau d'autonomie a progressé de [niveau débutant] à [niveau avancé].
+        </p>
+        <span class="edit-hint">✏️ Décris tes responsabilités réelles</span>
+      </div>
+
+      <div class="info-card reveal">
+        <h3><span class="icon red">🚀</span> Projection professionnelle</h3>
+        <!-- 🖊️ MODIFIE : parle de ton projet pro -->
+        <p>
+          Cette expérience m'a conforté dans mon souhait de [métier visé] dans le domaine [domaine].
+          À terme, je me projette vers [objectif professionnel] en développant mes compétences en [compétence clé].
+        </p>
+        <span class="edit-hint">✏️ Décris ton projet professionnel</span>
+      </div>
+
+      <div class="info-card reveal entreprise-full">
+        <h3><span class="icon blue">🗂️</span> Organigramme simplifié</h3>
+        <p>Mon positionnement dans la structure :</p>
+        <div class="orgchart">
+          <!-- 🖊️ MODIFIE : adapte l'organigramme -->
+          <div class="orgchart-node">Direction</div>
+          <div class="orgchart-sep">›</div>
+          <div class="orgchart-node">DSI</div>
+          <div class="orgchart-sep">›</div>
+          <div class="orgchart-node">Service Réseau</div>
+          <div class="orgchart-sep">›</div>
+          <div class="orgchart-node active">Moi (alternant)</div>
+        </div>
+        <span class="edit-hint">✏️ Adapte l'organigramme à ta structure</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════
+       MISSIONS
+  ═══════════════════════════════════════════════════════ -->
+  <div id="missions">
+    <div class="missions-wrapper">
+      <div class="section-header reveal">
+        <div class="section-label"><span></span> Section 3</div>
+        <h2>Mes <em>missions</em></h2>
+        <p class="section-desc">Chaque mission donne lieu à une analyse réflexive détaillée reliant contexte, traces et compétences du référentiel BUT R&T.</p>
+      </div>
+      <div class="missions-grid">
+
+        <!-- ── MISSION 1 ── -->
+        <div class="mission-card reveal" onclick="openModal('m1')">
+          <div class="mission-header">
+            <div class="mission-num">M·01</div>
+            <div class="mission-meta">
+              <!-- 🖊️ MODIFIE : titre et période -->
+              <div class="mission-title">Titre de la mission 1</div>
+              <div class="mission-period">📅 Période : [mois] – [mois] 20XX</div>
+            </div>
+          </div>
+          <div class="mission-body">
+            <!-- 🖊️ MODIFIE : résumé de la mission -->
+            <p>Courte description de la mission. Précise le contexte, les objectifs et les enjeux techniques ou organisationnels.</p>
+            <div class="mission-ac">
+              <!-- 🖊️ MODIFIE : mets tes AC concernés -->
+              <span class="ac-tag">AC21.01</span>
+              <span class="ac-tag">AC21.02</span>
+              <span class="ac-tag">AC24.02</span>
+            </div>
+          </div>
+          <div class="mission-footer">
+            <div class="mission-status"><div class="dot"></div> Analysée</div>
+            <div class="mission-arrow">Voir détail →</div>
+          </div>
+        </div>
+
+        <!-- ── MISSION 2 ── -->
+        <div class="mission-card reveal" onclick="openModal('m2')">
+          <div class="mission-header">
+            <div class="mission-num">M·02</div>
+            <div class="mission-meta">
+              <!-- 🖊️ MODIFIE -->
+              <div class="mission-title">Titre de la mission 2</div>
+              <div class="mission-period">📅 Période : [mois] – [mois] 20XX</div>
+            </div>
+          </div>
+          <div class="mission-body">
+            <p>Courte description de la mission. Précise le contexte, les objectifs et les enjeux techniques ou organisationnels.</p>
+            <div class="mission-ac">
+              <span class="ac-tag">AC22.02</span>
+              <span class="ac-tag">AC22.03</span>
+              <span class="ac-tag">AC24.03</span>
+            </div>
+          </div>
+          <div class="mission-footer">
+            <div class="mission-status"><div class="dot"></div> Analysée</div>
+            <div class="mission-arrow">Voir détail →</div>
+          </div>
+        </div>
+
+        <!-- ── MISSION 3 ── -->
+        <div class="mission-card reveal" onclick="openModal('m3')">
+          <div class="mission-header">
+            <div class="mission-num">M·03</div>
+            <div class="mission-meta">
+              <div class="mission-title">Titre de la mission 3</div>
+              <div class="mission-period">📅 Période : [mois] – [mois] 20XX</div>
+            </div>
+          </div>
+          <div class="mission-body">
+            <p>Courte description de la mission. Précise le contexte, les objectifs et les enjeux techniques ou organisationnels.</p>
+            <div class="mission-ac">
+              <span class="ac-tag">AC23.01</span>
+              <span class="ac-tag">AC23.02</span>
+              <span class="ac-tag">AC25.01</span>
+            </div>
+          </div>
+          <div class="mission-footer">
+            <div class="mission-status"><div class="dot"></div> Analysée</div>
+            <div class="mission-arrow">Voir détail →</div>
+          </div>
+        </div>
+
+        <!-- ── MISSION 4 ── -->
+        <div class="mission-card reveal" onclick="openModal('m4')">
+          <div class="mission-header">
+            <div class="mission-num">M·04</div>
+            <div class="mission-meta">
+              <div class="mission-title">Titre de la mission 4</div>
+              <div class="mission-period">📅 Période : [mois] – [mois] 20XX</div>
+            </div>
+          </div>
+          <div class="mission-body">
+            <p>Courte description de la mission. Précise le contexte, les objectifs et les enjeux techniques ou organisationnels.</p>
+            <div class="mission-ac">
+              <span class="ac-tag">AC24.01</span>
+              <span class="ac-tag">AC24.05</span>
+              <span class="ac-tag">AC25.02</span>
+            </div>
+          </div>
+          <div class="mission-footer">
+            <div class="mission-status"><div class="dot"></div> Analysée</div>
+            <div class="mission-arrow">Voir détail →</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       MODALS MISSIONS
+  ═══════════════════════════════════════════════════════ -->
+
+  <!-- Modal M1 -->
+  <div class="modal-overlay" id="modal-m1" onclick="closeModalOutside(event)">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal('m1')">✕</button>
+      <!-- 🖊️ MODIFIE tout le contenu du modal -->
+      <h3>Titre de la mission 1</h3>
+      <div class="modal-period">📅 Période : [mois – mois 20XX] · Durée : [X semaines]</div>
+
+      <div class="modal-section">
+        <div class="modal-section-title">🏗️ Contexte & objectifs</div>
+        <p>Décris ici le contexte complet de la mission : l'entreprise ou le service concerné, les objectifs à atteindre, les interlocuteurs impliqués (tuteur, collègues, clients), et les contraintes techniques ou organisationnelles rencontrées.</p>
+      </div>
+
+      <div class="modal-section">
+        <div class="modal-section-title">⚙️ Tâches réalisées</div>
+        <ul>
+          <li>Tâche ou étape 1 réalisée</li>
+          <li>Tâche ou étape 2 réalisée</li>
+          <li>Tâche ou étape 3 réalisée</li>
+          <li>Outils utilisés : [liste des outils]</li>
+        </ul>
+      </div>
+
+      <div class="modal-section">
+        <div class="modal-section-title">🎯 Compétences & AC mobilisés</div>
+        <div class="mission-ac" style="margin-bottom:0.75rem">
+          <span class="ac-tag">AC21.01</span>
+          <span class="ac-tag">AC21.02</span>
+          <span class="ac-tag">AC24.02</span>
+        </div>
+        <p>Justifie ici pourquoi ces AC sont mobilisés. Ex : «&nbsp;L'AC21.01 est travaillé car j'ai dû configurer le routage dynamique OSPF sur plusieurs équipements…&nbsp;»</p>
+      </div>
+
+      <div class="modal-section">
+        <div class="modal-section-title">📎 Traces & preuves</div>
+        <ul>
+          <li>Trace 1 : [type de document, ex. extrait de configuration, procédure rédigée…]</li>
+          <li>Trace 2 : [retour tuteur, mail de validation, capture d'écran annotée…]</li>
+        </ul>
+        <p style="margin-top:0.75rem; font-size:0.8rem; color:var(--muted)">💡 Tu peux insérer des images ou des liens ici directement dans le HTML.</p>
+      </div>
+
+      <div class="modal-section">
+        <div class="modal-section-title">🔍 Analyse réflexive & autoévaluation</div>
+        <p>Analyse ce que cette mission t'a appris. Parle de ta progression, des difficultés rencontrées, de comment tu les as surmontées, et de ton niveau d'autonomie atteint. C'est la partie la plus importante aux yeux de l'évaluateur.</p>
+        <div class="selfeval-grid" style="margin-top:1rem">
+          <!-- 🖊️ MODIFIE : les labels et les pourcentages (width dans le style) -->
+          <div class="selfeval-item">
+            <div class="selfeval-label">Maîtrise technique</div>
+            <div class="selfeval-bar"><div class="selfeval-fill" style="width:75%"></div></div>
+          </div>
+          <div class="selfeval-item">
+            <div class="selfeval-label">Autonomie</div>
+            <div class="selfeval-bar"><div class="selfeval-fill" style="width:60%"></div></div>
+          </div>
+          <div class="selfeval-item">
+            <div class="selfeval-label">Communication</div>
+            <div class="selfeval-bar"><div class="selfeval-fill" style="width:80%"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal M2 -->
+  <div class="modal-overlay" id="modal-m2" onclick="closeModalOutside(event)">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal('m2')">✕</button>
+      <h3>Titre de la mission 2</h3>
+      <div class="modal-period">📅 Période : [mois – mois 20XX] · Durée : [X semaines]</div>
+      <div class="modal-section">
+        <div class="modal-section-title">🏗️ Contexte & objectifs</div>
+        <p>Décris ici le contexte complet de la mission 2…</p>
+        <span class="edit-hint">✏️ Remplace par ton contenu réel</span>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">⚙️ Tâches réalisées</div>
+        <ul>
+          <li>Tâche 1</li>
+          <li>Tâche 2</li>
+          <li>Tâche 3</li>
+        </ul>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">🎯 Compétences & AC mobilisés</div>
+        <div class="mission-ac" style="margin-bottom:0.75rem">
+          <span class="ac-tag">AC22.02</span>
+          <span class="ac-tag">AC22.03</span>
+          <span class="ac-tag">AC24.03</span>
+        </div>
+        <p>Justification de chaque AC mobilisé…</p>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">📎 Traces & preuves</div>
+        <ul><li>Trace 1</li><li>Trace 2</li></ul>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">🔍 Analyse réflexive & autoévaluation</div>
+        <p>Ton analyse réflexive de la mission 2…</p>
+        <div class="selfeval-grid" style="margin-top:1rem">
+          <div class="selfeval-item">
+            <div class="selfeval-label">Maîtrise technique</div>
+            <div class="selfeval-bar"><div class="selfeval-fill" style="width:70%"></div></div>
+          </div>
+          <div class="selfeval-item">
+            <div class="selfeval-label">Autonomie</div>
+            <div class="selfeval-bar"><div class="selfeval-fill" style="width:65%"></div></div>
+          </div>
+          <div class="selfeval-item">
+            <div class="selfeval-label">Communication</div>
+            <div class="selfeval-bar"><div class="selfeval-fill" style="width:75%"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal M3 -->
+  <div class="modal-overlay" id="modal-m3" onclick="closeModalOutside(event)">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal('m3')">✕</button>
+      <h3>Titre de la mission 3</h3>
+      <div class="modal-period">📅 Période : [mois – mois 20XX] · Durée : [X semaines]</div>
+      <div class="modal-section">
+        <div class="modal-section-title">🏗️ Contexte & objectifs</div>
+        <p>Décris ici le contexte complet de la mission 3…</p>
+        <span class="edit-hint">✏️ Remplace par ton contenu réel</span>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">⚙️ Tâches réalisées</div>
+        <ul><li>Tâche 1</li><li>Tâche 2</li><li>Tâche 3</li></ul>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">🎯 Compétences & AC mobilisés</div>
+        <div class="mission-ac" style="margin-bottom:0.75rem">
+          <span class="ac-tag">AC23.01</span>
+          <span class="ac-tag">AC23.02</span>
+          <span class="ac-tag">AC25.01</span>
+        </div>
+        <p>Justification des AC mobilisés…</p>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">📎 Traces & preuves</div>
+        <ul><li>Trace 1</li><li>Trace 2</li></ul>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">🔍 Analyse réflexive & autoévaluation</div>
+        <p>Ton analyse réflexive de la mission 3…</p>
+        <div class="selfeval-grid" style="margin-top:1rem">
+          <div class="selfeval-item">
+            <div class="selfeval-label">Maîtrise technique</div>
+            <div class="selfeval-bar"><div class="selfeval-fill" style="width:80%"></div></div>
+          </div>
+          <div class="selfeval-item">
+            <div class="selfeval-label">Autonomie</div>
+            <div class="selfeval-bar"><div class="selfeval-fill" style="width:70%"></div></div>
+          </div>
+          <div class="selfeval-item">
+            <div class="selfeval-label">Communication</div>
+            <div class="selfeval-bar"><div class="selfeval-fill" style="width:65%"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal M4 -->
+  <div class="modal-overlay" id="modal-m4" onclick="closeModalOutside(event)">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal('m4')">✕</button>
+      <h3>Titre de la mission 4</h3>
+      <div class="modal-period">📅 Période : [mois – mois 20XX] · Durée : [X semaines]</div>
+      <div class="modal-section">
+        <div class="modal-section-title">🏗️ Contexte & objectifs</div>
+        <p>Décris ici le contexte complet de la mission 4…</p>
+        <span class="edit-hint">✏️ Remplace par ton contenu réel</span>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">⚙️ Tâches réalisées</div>
+        <ul><li>Tâche 1</li><li>Tâche 2</li><li>Tâche 3</li></ul>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">🎯 Compétences & AC mobilisés</div>
+        <div class="mission-ac" style="margin-bottom:0.75rem">
+          <span class="ac-tag">AC24.01</span>
+          <span class="ac-tag">AC24.05</span>
+          <span class="ac-tag">AC25.02</span>
+        </div>
+        <p>Justification des AC mobilisés…</p>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">📎 Traces & preuves</div>
+        <ul><li>Trace 1</li><li>Trace 2</li></ul>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">🔍 Analyse réflexive & autoévaluation</div>
+        <p>Ton analyse réflexive de la mission 4…</p>
+        <div class="selfeval-grid" style="margin-top:1rem">
+          <div class="selfeval-item">
+            <div class="selfeval-label">Maîtrise technique</div>
+            <div class="selfeval-bar"><div class="selfeval-fill" style="width:85%"></div></div>
+          </div>
+          <div class="selfeval-item">
+            <div class="selfeval-label">Autonomie</div>
+            <div class="selfeval-bar"><div class="selfeval-fill" style="width:75%"></div></div>
+          </div>
+          <div class="selfeval-item">
+            <div class="selfeval-label">Communication</div>
+            <div class="selfeval-bar"><div class="selfeval-fill" style="width:70%"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       BILAN PAR COMPÉTENCE
+  ═══════════════════════════════════════════════════════ -->
+  <section id="bilan">
+    <div class="section-header reveal">
+      <div class="section-label"><span></span> Section 4</div>
+      <h2>Bilan par <em>compétence</em></h2>
+      <p class="section-desc">Analyse transversale de mon niveau de maîtrise pour chaque compétence du référentiel BUT R&T, entre IUT et entreprise.</p>
+    </div>
+    <div class="competences-grid">
+
+      <!-- RT1 -->
+      <div class="comp-card c1 reveal">
+        <div class="comp-icon">🌐</div>
+        <h3>RT1 · Administrer les réseaux et l'Internet</h3>
+        <!-- 🖊️ MODIFIE : ton bilan pour RT1 -->
+        <p>Décris ici ton bilan pour RT1 : ce que tu maîtrises bien, ce qui reste à consolider, et la complémentarité IUT/entreprise.</p>
+        <div class="comp-level">
+          <span class="comp-level-label">Niveau atteint</span>
+          <!-- 🖊️ MODIFIE : "Niveau 2 - Avancé" selon ta situation -->
+          <span class="comp-level-value" style="color:var(--accent)">Niveau 2 · [Appréciation]</span>
+        </div>
+        <!-- 🖊️ MODIFIE : le pourcentage (width) selon ton niveau -->
+        <div class="comp-bar"><div class="comp-fill" style="width:75%"></div></div>
+        <div class="ac-list">
+          <!-- 🖊️ MODIFIE : liste tes AC maîtrisés pour RT1 -->
+          <div class="ac-item">AC21.01 – Configurer le routage dynamique</div>
+          <div class="ac-item">AC21.03 – Déployer des solutions virtualisées</div>
+          <div class="ac-item">AC21.06 – Travailler en équipe</div>
+        </div>
+      </div>
+
+      <!-- RT2 -->
+      <div class="comp-card c2 reveal">
+        <div class="comp-icon">🔗</div>
+        <h3>RT2 · Connecter les entreprises et les usagers</h3>
+        <!-- 🖊️ MODIFIE : ton bilan pour RT2 -->
+        <p>Décris ici ton bilan pour RT2 : expériences en transmission, accès distant, VPN, multi-site…</p>
+        <div class="comp-level">
+          <span class="comp-level-label">Niveau atteint</span>
+          <span class="comp-level-value" style="color:var(--accent2)">Niveau 2 · [Appréciation]</span>
+        </div>
+        <div class="comp-bar"><div class="comp-fill" style="width:65%"></div></div>
+        <div class="ac-list">
+          <div class="ac-item">AC22.02 – Accès distant sécurisé</div>
+          <div class="ac-item">AC22.03 – Connexion multi-site</div>
+          <div class="ac-item">AC22.05 – Cahier des charges R&T</div>
+        </div>
+      </div>
+
+      <!-- RT3 -->
+      <div class="comp-card c3 reveal">
+        <div class="comp-icon">💻</div>
+        <h3>RT3 · Créer des outils et applications pour les R&T</h3>
+        <!-- 🖊️ MODIFIE : ton bilan pour RT3 -->
+        <p>Décris ici ton bilan pour RT3 : scripting, développement, automatisation…</p>
+        <div class="comp-level">
+          <span class="comp-level-label">Niveau atteint</span>
+          <span class="comp-level-value" style="color:var(--accent3)">Niveau 2 · [Appréciation]</span>
+        </div>
+        <div class="comp-bar"><div class="comp-fill" style="width:55%"></div></div>
+        <div class="ac-list">
+          <div class="ac-item">AC23.01 – Automatiser avec des scripts</div>
+          <div class="ac-item">AC23.02 – Développer une application</div>
+          <div class="ac-item">AC23.04 – Système de gestion de données</div>
+        </div>
+      </div>
+
+      <!-- Cyber -->
+      <div class="comp-card c4 reveal">
+        <div class="comp-icon">🔐</div>
+        <h3>Cyber · Administrer un SI sécurisé</h3>
+        <!-- 🖊️ MODIFIE : ton bilan pour Cyber -->
+        <p>Décris ici ton bilan pour la compétence Cybersécurité : vulnérabilités, outils de sécurisation, pentest…</p>
+        <div class="comp-level">
+          <span class="comp-level-label">Niveau atteint</span>
+          <span class="comp-level-value" style="color:#f0c040">Niveau 1 · [Appréciation]</span>
+        </div>
+        <div class="comp-bar"><div class="comp-fill" style="width:70%"></div></div>
+        <div class="ac-list">
+          <div class="ac-item">AC24.01 – Bonnes pratiques cybersécurité</div>
+          <div class="ac-item">AC24.05 – Types d'attaques</div>
+          <div class="ac-item">AC25.02 – Outils de pentest</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════
+       PROGRESSION / TIMELINE
+  ═══════════════════════════════════════════════════════ -->
+  <div id="progression">
+    <div class="progression-wrapper">
+      <div class="section-header reveal">
+        <div class="section-label"><span></span> Section 5</div>
+        <h2>Ma <em>progression</em> dans l'année</h2>
+        <p class="section-desc">Retour sur l'évolution de mon autonomie, de mes méthodes et de mes compétences tout au long de l'alternance.</p>
+      </div>
+      <div class="timeline">
+
+        <div class="timeline-item reveal">
+          <div class="timeline-dot"></div>
+          <!-- 🖊️ MODIFIE : la date et le contenu -->
+          <div class="timeline-date">📅 [Mois 20XX]</div>
+          <h4>Intégration et prise en main</h4>
+          <p>Décris tes premières semaines : découverte de l'entreprise, de l'équipe, des outils. Qu'as-tu appris rapidement ? Quelles difficultés as-tu rencontré au démarrage ?</p>
+        </div>
+
+        <div class="timeline-item reveal">
+          <div class="timeline-dot"></div>
+          <div class="timeline-date">📅 [Mois 20XX]</div>
+          <h4>Montée en compétence</h4>
+          <p>Décris comment tu as progressé : nouvelles responsabilités, missions plus complexes, autonomie accrue. Donne un exemple concret de progression.</p>
+        </div>
+
+        <div class="timeline-item reveal">
+          <div class="timeline-dot"></div>
+          <div class="timeline-date">📅 [Mois 20XX]</div>
+          <h4>Difficultés et rebonds</h4>
+          <p>Parle des obstacles rencontrés et de la manière dont tu les as surmontés. Cette partie est valorisée dans la grille d'évaluation : montrer que tu sais identifier et dépasser tes limites.</p>
+        </div>
+
+        <div class="timeline-item reveal">
+          <div class="timeline-dot" style="background:var(--accent2)"></div>
+          <div class="timeline-date" style="color:var(--accent2)">📅 [Mois 20XX] · Aujourd'hui</div>
+          <h4>Bilan global & perspectives</h4>
+          <p>Quels progrès observes-tu depuis ton entrée en formation ? Comment ton regard sur le métier a-t-il évolué ? Quelle orientation professionnelle se dessine pour toi ?</p>
+          <span class="edit-hint" style="margin-top:0.75rem; display:inline-block">✏️ Tes perspectives professionnelles ici</span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       FOOTER
+  ═══════════════════════════════════════════════════════ -->
+  <footer>
+    <div class="footer-left">
+      <!-- 🖊️ MODIFIE -->
+      RT · Portfolio
+    </div>
+    <div class="footer-right">
+      <!-- 🖊️ MODIFIE : ton nom, ta formation -->
+      Portfolio d'alternance · <strong>Prénom NOM</strong> · BUT R&T Cybersécurité · IUT Grand Ouest Normandie · 2025–2026
+    </div>
+  </footer>
+
+  <!-- ═══════════════════════════════════════════════════════
+       JS
+  ═══════════════════════════════════════════════════════ -->
+  <script>
+    // ── Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('visible'), i * 80);
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+
+    // ── Animate bars when visible
+    const bars = document.querySelectorAll('.comp-fill, .selfeval-fill');
+    const barObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const target = e.target.style.width;
+          e.target.style.width = '0%';
+          requestAnimationFrame(() => {
+            setTimeout(() => { e.target.style.width = target; }, 200);
+          });
+          barObserver.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.5 });
+    bars.forEach(b => barObserver.observe(b));
+
+    // ── Modals
+    function openModal(id) {
+      document.getElementById('modal-' + id).classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal(id) {
+      document.getElementById('modal-' + id).classList.remove('active');
+      document.body.style.overflow = '';
+    }
+    function closeModalOutside(e) {
+      if (e.target.classList.contains('modal-overlay')) {
+        e.target.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    }
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-overlay.active').forEach(m => {
+          m.classList.remove('active');
+          document.body.style.overflow = '';
+        });
+      }
+    });
+
+    // ── Smooth nav highlight
+    const sections = document.querySelectorAll('[id]');
+    const navLinks = document.querySelectorAll('.nav-links a');
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(s => {
+        if (window.scrollY >= s.offsetTop - 100) current = s.id;
+      });
+      navLinks.forEach(l => {
+        l.style.color = l.getAttribute('href') === '#' + current ? 'var(--text)' : '';
+      });
+    });
+  </script>
+</body>
+</html>
